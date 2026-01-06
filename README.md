@@ -1,0 +1,1 @@
+# personal-home-assistant-typescript-pseudocode
