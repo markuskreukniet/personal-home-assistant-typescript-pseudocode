@@ -38,14 +38,10 @@ function automation_living_room_lights_by_time() {
       [helper_evening_start_time]: makeScriptLivingRoomLightsOn("Living Room Lights Evening On")
     }
 
-    const script = scripts[time];
-    if (!script) {
-      return
-    }
-    script()
-
-    helper_living_room_manual_override = false;
+    scripts[time]()
   }
+
+  helper_living_room_manual_override = false
 }
 
 function helper_low_illuminance() {
