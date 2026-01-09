@@ -25,20 +25,13 @@ function automation_living_room_lights_by_illuminance() {
 
 function automation_living_room_lights_by_time() {
   if (helper_low_illuminance()) {
-    const livingRoomTimes = [
-      helper_sunset_up_start_time,
-      helper_sunset_down_start_time,
-      helper_evening_start_time
-    ]
-    type LivingRoomTime = typeof livingRoomTimes[number]
-
-    const scripts: Record<LivingRoomTime, () => void> = {
-      [helper_sunset_up_start_time]: makeScriptLivingRoomLightsOn("Living Room Lights Sunset Up On"),
-      [helper_sunset_down_start_time]: makeScriptLivingRoomLightsOn("Living Room Lights Sunset Down On"),
-      [helper_evening_start_time]: makeScriptLivingRoomLightsOn("Living Room Lights Evening On")
+    if (time === helper_sunset_up_start_time) {
+      script_living_room_lights_on("Living Room Lights Sunset Up On")
+    } else if (time === helper_sunset_down_start_time) {
+      script_living_room_lights_on("Living Room Lights Sunset Down On")
     }
-
-    scripts[time]()
+  } else if (time === helper_evening_start_time && helper_living_room_lights_on) {
+    script_living_room_lights_on("Living Room Lights Evening On")
   }
 
   helper_living_room_manual_override = false
@@ -81,31 +74,31 @@ function script_home_lights_off() {
 
 function script_when_sunset_up_time_window() {
   if (time === `between ${helper_sunset_up_start_time} and ${helper_sunset_up_end_time}`) {
-    script_helper_living_room_lights_on("Living Room Lights Sunset Up On")
+    script_living_room_lights_on("Living Room Lights Sunset Up On")
   }
 }
 
 function script_when_sunset_up_button_time_window() {
   if (time === `between ${helper_sunset_up_button_start_time} and ${helper_sunset_down_start_time}`) {
-    script_helper_living_room_lights_on("Living Room Lights Sunset Up On")
+    script_living_room_lights_on("Living Room Lights Sunset Up On")
   }
 }
 
 function script_when_sunset_down_time_window() {
   if (time === `between ${helper_sunset_down_start_time} and ${helper_evening_start_time}`) {
-    script_helper_living_room_lights_on("Living Room Lights Sunset Down On")
+    script_living_room_lights_on("Living Room Lights Sunset Down On")
   }
 }
 
 function script_when_evening_time_window() {
   if (time === `between ${helper_evening_start_time} and ${helper_night_start_time}`) {
-    script_helper_living_room_lights_on("Living Room Lights Evening On")
+    script_living_room_lights_on("Living Room Lights Evening On")
   }
 }
 
 function script_when_night_time_window() {
   if (time === `between ${helper_night_start_time} and ${helper_sunset_up_button_start_time}`) {
-    script_helper_living_room_lights_on("Living Room Lights Evening On")
+    script_living_room_lights_on("Living Room Lights Evening On")
   }
 }
 
@@ -114,11 +107,7 @@ function script_living_room_lights_off() {
   helper_living_room_lights_on = false
 }
 
-function makeScriptLivingRoomLightsOn(scene_entity: string): () => void {
-  return () => script_helper_living_room_lights_on(scene_entity)
-}
-
-function script_helper_living_room_lights_on(scene_entity: string): void {
+function script_living_room_lights_on(scene_entity: string): void {
   activateScene(scene_entity)
   helper_living_room_lights_on = true
 }
