@@ -25,10 +25,12 @@ function automation_living_room_lights_by_illuminance() {
 
 function automation_living_room_lights_by_time() {
   if (helper_low_illuminance()) {
-    if (time === helper_sunset_up_start_time) {
-      script_living_room_lights_on("Living Room Lights Sunset Up On")
-    } else if (time === helper_sunset_down_start_time) {
-      script_living_room_lights_on("Living Room Lights Sunset Down On")
+    switch(time) {
+      case helper_sunset_up_start_time:
+        script_living_room_lights_on("Living Room Lights Sunset Up On")
+        break
+      case helper_sunset_down_start_time:
+        script_living_room_lights_on("Living Room Lights Sunset Down On")
     }
   } else if (time === helper_evening_start_time && helper_living_room_lights_on) {
     script_living_room_lights_on("Living Room Lights Evening On")
